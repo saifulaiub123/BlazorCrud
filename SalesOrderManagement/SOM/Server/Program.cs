@@ -3,6 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using SOM.Core.Constant;
 using SOM.DAL.DBContext;
+using System.Text.Json.Serialization;
+using System.Text.Json;
+using FluentValidation.AspNetCore;
 
 IConfiguration Configuration;
 
@@ -15,7 +18,21 @@ builder.Services.AddDbContext<ApplicationDbContext>(
                 options => options.UseSqlServer(Configuration.GetConnectionString(ConfigOption.DbConnName),
                             options => options.EnableRetryOnFailure())
                 );
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews()
+                .AddJsonOptions(opt =>
+                {
+                    opt.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+                    opt.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+                })
+                .AddFluentValidation(opt =>
+                {
+                    // Validate child properties and root collection elements
+                    opt.ImplicitlyValidateChildProperties = false;
+                    opt.ImplicitlyValidateRootCollectionElements = false;
+
+                    // Automatic registration of validators in assembly
+                    opt.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+                });
 builder.Services.AddRazorPages();
 
 var app = builder.Build();
