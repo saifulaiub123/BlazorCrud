@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <Folder Include="Model\" />
-    <Folder Include="Mapping\" />
     <Folder Include="ViewModel\" />
   </ItemGroup>
 

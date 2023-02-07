@@ -1,6 +1,6 @@
 ﻿using SOM.DAL.DBContext;
 
-namespace SOM.DAL.UnitOfWork
+namespace SOM.DAL.UOF
 {
     public class UnitOfWork : IUnitOfWork
     {

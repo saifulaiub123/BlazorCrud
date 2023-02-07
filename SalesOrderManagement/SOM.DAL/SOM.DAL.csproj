@@ -10,8 +10,4 @@
     <ProjectReference Include="..\SOM.CORE\SOM.Core.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Dependency\" />
-  </ItemGroup>
-
 </Project>
