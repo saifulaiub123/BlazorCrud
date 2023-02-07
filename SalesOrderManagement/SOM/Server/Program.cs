@@ -1,9 +1,20 @@
 using Microsoft.AspNetCore.ResponseCompression;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using SOM.Core.Constant;
+using SOM.DAL.DBContext;
+
+IConfiguration Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+Configuration = builder.Configuration;
 
+
+builder.Services.AddDbContext<ApplicationDbContext>(
+                options => options.UseSqlServer(Configuration.GetConnectionString(ConfigOption.DbConnName),
+                            options => options.EnableRetryOnFailure())
+                );
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
