@@ -10,4 +10,12 @@
     <ProjectReference Include="..\SOM.CORE\SOM.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Configuration\" />
+    <Folder Include="DBContext\" />
+    <Folder Include="Dependency\" />
+    <Folder Include="UnitOfWork\" />
+    <Folder Include="Repository\" />
+  </ItemGroup>
+
 </Project>

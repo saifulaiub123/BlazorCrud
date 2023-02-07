@@ -6,4 +6,12 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Constant\" />
+    <Folder Include="DBModel\" />
+    <Folder Include="Model\" />
+    <Folder Include="IEntity\" />
+    <Folder Include="ViewModel\" />
+  </ItemGroup>
+
 </Project>
