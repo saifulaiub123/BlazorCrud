@@ -12,7 +12,6 @@
 
   <ItemGroup>
     <Folder Include="Configuration\" />
-    <Folder Include="DBContext\" />
     <Folder Include="Dependency\" />
     <Folder Include="UnitOfWork\" />
     <Folder Include="Repository\" />
