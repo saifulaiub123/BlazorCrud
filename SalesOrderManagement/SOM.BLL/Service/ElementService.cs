@@ -31,9 +31,15 @@ namespace SOM.Bll.Service
         }
         public async Task Update(ElementModel element)
         {
-            var mappeedResult = _mapper.Map<Element>(element);
-            await _unitOfWork.ElementRepository.Update(mappeedResult);
-            await _unitOfWork.CommitAsync();
+            var existingElement = await _unitOfWork.ElementRepository.GetById((int)element.Id);
+            if(existingElement != null)
+            {
+                existingElement.Width = element.Width;
+                existingElement.Height = element.Height;
+                existingElement.ElementTypeId = element.ElementTypeId;
+                await _unitOfWork.ElementRepository.Update(existingElement);
+                await _unitOfWork.CommitAsync();
+            }
         }
 
         public async Task Delete(int id)
@@ -45,7 +51,6 @@ namespace SOM.Bll.Service
                 await _unitOfWork.ElementRepository.Update(element);
                 await _unitOfWork.CommitAsync();
             }
-            
         } 
     }
 }
