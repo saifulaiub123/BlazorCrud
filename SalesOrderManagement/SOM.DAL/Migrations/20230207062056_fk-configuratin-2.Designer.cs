@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SOM.DAL.DBContext;
 
@@ -11,9 +12,11 @@ using SOM.DAL.DBContext;
 namespace SOM.DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230207062056_fk-configuratin-2")]
+    partial class fkconfiguratin2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -112,13 +115,11 @@ namespace SOM.DAL.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("State")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("UpdatedBy")
                         .HasColumnType("int");
@@ -158,10 +159,6 @@ namespace SOM.DAL.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("OrderId");
-
-                    b.HasIndex("WindowId");
 
                     b.ToTable("OrderWindow");
                 });
@@ -251,25 +248,6 @@ namespace SOM.DAL.Migrations
                     b.Navigation("ElementType");
                 });
 
-            modelBuilder.Entity("SOM.Core.DBModel.OrderWindow", b =>
-                {
-                    b.HasOne("SOM.Core.DBModel.Order", "Order")
-                        .WithMany("OrderWindow")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SOM.Core.DBModel.Window", "Window")
-                        .WithMany("OrderWindow")
-                        .HasForeignKey("WindowId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Order");
-
-                    b.Navigation("Window");
-                });
-
             modelBuilder.Entity("SOM.Core.DBModel.WindowElement", b =>
                 {
                     b.HasOne("SOM.Core.DBModel.Element", "Element")
@@ -294,15 +272,8 @@ namespace SOM.DAL.Migrations
                     b.Navigation("WindowElement");
                 });
 
-            modelBuilder.Entity("SOM.Core.DBModel.Order", b =>
-                {
-                    b.Navigation("OrderWindow");
-                });
-
             modelBuilder.Entity("SOM.Core.DBModel.Window", b =>
                 {
-                    b.Navigation("OrderWindow");
-
                     b.Navigation("WindowElement");
                 });
 #pragma warning restore 612, 618

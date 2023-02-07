@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SOM.DAL.DBContext;
 
@@ -11,9 +12,11 @@ using SOM.DAL.DBContext;
 namespace SOM.DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230207062533_fk-configuratin-3")]
+    partial class fkconfiguratin3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -161,8 +164,6 @@ namespace SOM.DAL.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.HasIndex("WindowId");
-
                     b.ToTable("OrderWindow");
                 });
 
@@ -259,15 +260,7 @@ namespace SOM.DAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SOM.Core.DBModel.Window", "Window")
-                        .WithMany("OrderWindow")
-                        .HasForeignKey("WindowId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Order");
-
-                    b.Navigation("Window");
                 });
 
             modelBuilder.Entity("SOM.Core.DBModel.WindowElement", b =>
@@ -301,8 +294,6 @@ namespace SOM.DAL.Migrations
 
             modelBuilder.Entity("SOM.Core.DBModel.Window", b =>
                 {
-                    b.Navigation("OrderWindow");
-
                     b.Navigation("WindowElement");
                 });
 #pragma warning restore 612, 618

@@ -6,5 +6,6 @@ namespace SOM.Core.DBModel
         public string Name { get; set; }
         public string State { get; set; }
         public bool IsDeleted { get; set; }
+        public virtual ICollection<OrderWindow> OrderWindow { get; set; }
     }
 }

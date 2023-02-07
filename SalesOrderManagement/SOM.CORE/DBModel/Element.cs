@@ -9,5 +9,6 @@ namespace SOM.Core.DBModel
         public bool IsDeleted { get; set; }
 
         public virtual ElementType ElementType { get; set; }
+        public ICollection<WindowElement>? WindowElement { get; set; }
     }
 }
