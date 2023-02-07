@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <Folder Include="IService\" />
+    <Folder Include="Dependency\" />
     <Folder Include="Service\" />
   </ItemGroup>
 
