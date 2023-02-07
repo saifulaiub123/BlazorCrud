@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using SOM.Core.DBModel;
 using SOM.Core.Dto;
+using SOM.Core.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,7 @@ namespace SOM.Core.Mapping
         public ElementMapping()
         {
             CreateMap<ElementDto, Element>().ReverseMap();
+            CreateMap<ElementModel, Element>().ReverseMap();
         }
     }
 }

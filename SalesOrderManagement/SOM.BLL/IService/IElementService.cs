@@ -1,4 +1,5 @@
 ﻿using SOM.Core.Dto;
+using SOM.Core.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +10,9 @@ namespace SOM.Bll.IService
 {
     public interface IElementService
     {
-        Task Add(ElementDto element);
+        Task Add(ElementModel element);
         Task<List<ElementDto>> GetAll();
-        Task Update(ElementDto element);
+        Task Update(ElementModel element);
         Task Delete(int id);
     }
 }
