@@ -6,6 +6,7 @@ using SOM.DAL.DBContext;
 using System.Text.Json.Serialization;
 using System.Text.Json;
 using FluentValidation.AspNetCore;
+using System.Reflection;
 
 IConfiguration Configuration;
 
