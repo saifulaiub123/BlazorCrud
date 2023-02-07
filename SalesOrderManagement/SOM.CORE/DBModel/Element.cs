@@ -7,5 +7,7 @@ namespace SOM.Core.DBModel
         public double Height { get; set; }
         public int ElementTypeId { get; set; }
         public bool IsDeleted { get; set; }
+
+        public virtual ElementType ElementType { get; set; }
     }
 }
