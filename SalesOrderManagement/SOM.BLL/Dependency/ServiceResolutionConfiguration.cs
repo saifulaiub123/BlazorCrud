@@ -9,6 +9,7 @@ namespace SOM.Bll.Dependency
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
             services.AddScoped<IElementService, ElementService>();
+            services.AddScoped<IWindowService, WindowService>();
             return services;
         }
     }
