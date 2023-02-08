@@ -11,6 +11,9 @@ namespace SOM.DAL.UOF
         public IRepository<Element, int> _elementRepository;
         public IRepository<Window, int> _windowRepository;
         public IRepository<WindowElement, int> _windowElementRepository;
+        public IRepository<Order, int> _orderRepository;
+        public IRepository<OrderWindow, int> _orderWindowRepository;
+
         public UnitOfWork(ApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
@@ -27,6 +30,16 @@ namespace SOM.DAL.UOF
         public IRepository<WindowElement, int> WindowElementRepository
         {
             get { return _windowElementRepository = _windowElementRepository ?? new Repository<WindowElement, int>(_dbContext); }
+        }
+
+        public IRepository<Order, int> OrderRepository
+        {
+            get { return _orderRepository = _orderRepository ?? new Repository<Order, int>(_dbContext); }
+        }
+
+        public IRepository<OrderWindow, int> OrderWindowRepository
+        {
+            get { return _orderWindowRepository = _orderWindowRepository ?? new Repository<OrderWindow, int>(_dbContext); }
         }
 
         public void Commit()
