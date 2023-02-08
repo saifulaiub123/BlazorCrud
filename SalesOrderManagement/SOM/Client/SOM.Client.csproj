@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\SOM.BLL\SOM.Bll.csproj" />
     <ProjectReference Include="..\..\SOM.CORE\SOM.Core.csproj" />
     <ProjectReference Include="..\Shared\SOM.Shared.csproj" />
   </ItemGroup>

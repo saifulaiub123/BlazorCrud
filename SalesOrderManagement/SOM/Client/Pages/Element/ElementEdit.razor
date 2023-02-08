@@ -1,0 +1,22 @@
+﻿@page "/element-edit"
+@page "/element-edit/{Id:int}"
+@using SOM.Core.Dto;
+
+@inject HttpClient Http
+
+
+<h3>Element Edit @Id</h3>
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    private ElementDto? element { get; set; }
+    private List<ElementTypeDto> elementTypes;
+
+    protected override async Task OnInitializedAsync()
+    {
+        elementTypes = await Http.GetFromJsonAsync<List<ElementTypeDto>>("/api/ElementType/GetAll");
+    }
+
+}

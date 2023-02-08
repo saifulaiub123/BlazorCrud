@@ -1,0 +1,58 @@
+﻿@page "/element-list"
+@using SOM.Core.Model;
+@using SOM.Core.ViewModel;
+@using SOM.Shared
+
+@inject HttpClient Http
+@inject NavigationManager Navigation
+
+@*@inject IElementService _elementService*@
+
+<h3>Element List</h3>
+
+@if (elements == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Type</th>
+                <th>Width</th>
+                <th>Height</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var element in elements)
+            {
+                <tr>
+                    <td>@element.Id</td>
+                    <td>@element.ElementTypeName</td>
+                    <td>@element.Height</td>
+                    <td>@element.Width</td>
+                    <td>
+                        <a class="nav-link" href="element-edit/@element.Id">
+                            <span class="oi oi-pencil" aria-hidden="true">Edit</span>
+                        </a>
+                        <a class="nav-link" href="element-delete/@element.Id">
+                            <span class="oi oi-trash" aria-hidden="true">Delete</span>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<ElementViewModel>? elements;
+
+    protected override async Task OnInitializedAsync()
+    {
+        elements = await Http.GetFromJsonAsync<List<ElementViewModel>>("/api/Element/GetAll");
+    }
+}

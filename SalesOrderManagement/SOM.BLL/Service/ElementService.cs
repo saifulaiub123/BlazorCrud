@@ -3,6 +3,7 @@ using SOM.Bll.IService;
 using SOM.Core.DBModel;
 using SOM.Core.Dto;
 using SOM.Core.Model;
+using SOM.Core.ViewModel;
 using SOM.DAL;
 using SOM.DAL.UOF;
 
@@ -18,10 +19,15 @@ namespace SOM.Bll.Service
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<List<ElementDto>> GetAll()
+        public async Task<List<ElementViewModel>> GetAll()
         {
-            var data = await _unitOfWork.ElementRepository.GetAll();
-            return _mapper.Map<List<ElementDto>>(data);
+            var data = await _unitOfWork.ElementRepository.GetAll(x=> !x.IsDeleted, y => y.ElementType);
+            return _mapper.Map<List<ElementViewModel>>(data);
+        }
+        public async Task<ElementDto> GetById(int id)
+        {
+            var data = await _unitOfWork.ElementRepository.FindBy(x => !x.IsDeleted && x.Id == id);
+            return _mapper.Map<ElementDto>(data);
         }
         public async Task Add(ElementModel element)
         {

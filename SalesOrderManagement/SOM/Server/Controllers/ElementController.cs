@@ -19,6 +19,12 @@ namespace SOM.Server.Controllers
             var result = await _elementService.GetAll();
             return Ok(result);
         }
+        [Route("GetById")]
+        public async Task<ActionResult> GetById(int id)
+        {
+            var result = await _elementService.GetById(id);
+            return Ok(result);
+        }
 
         [HttpPost]
         [Route("Add")]

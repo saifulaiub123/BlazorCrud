@@ -2,12 +2,7 @@
 using SOM.Core.DBModel;
 using SOM.Core.Dto;
 using SOM.Core.Model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security;
-using System.Text;
-using System.Threading.Tasks;
+using SOM.Core.ViewModel;
 
 namespace SOM.Core.Mapping
 {
@@ -17,6 +12,8 @@ namespace SOM.Core.Mapping
         {
             CreateMap<ElementDto, Element>().ReverseMap();
             CreateMap<ElementModel, Element>().ReverseMap();
+            CreateMap<ElementViewModel, Element>().ReverseMap()
+                .ForMember(a => a.ElementTypeName, b => b.MapFrom(b => b.ElementType.Name));
         }
     }
 }
