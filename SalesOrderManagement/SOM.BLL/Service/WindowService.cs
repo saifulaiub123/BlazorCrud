@@ -3,6 +3,7 @@ using SOM.Bll.IService;
 using SOM.Core.DBModel;
 using SOM.Core.Dto;
 using SOM.Core.Model;
+using SOM.Core.ViewModel;
 using SOM.DAL.UOF;
 using System;
 using System.Collections.Generic;
@@ -22,10 +23,10 @@ namespace SOM.Bll.Service
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<List<WindowDto>> GetAll()
+        public async Task<List<WindowViewModel>> GetAll()
         {
             var data = await _unitOfWork.WindowRepository.GetAll();
-            return _mapper.Map<List<WindowDto>>(data);
+            return _mapper.Map<List<WindowViewModel>>(data);
         }
         public async Task<WindowDto> GetById(int id)
         {

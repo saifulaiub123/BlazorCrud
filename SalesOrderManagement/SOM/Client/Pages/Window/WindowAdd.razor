@@ -1,0 +1,69 @@
+﻿@page "/window-add"
+@using SOM.Core.Model;
+@using SOM.Core.ViewModel;
+@using SOM.Shared
+
+@inject HttpClient Http
+@inject NavigationManager Navigation
+
+<h3>Window List</h3>
+
+@if (windows == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <a class="nav-link" href="window-add">
+        <span class="oi oi-pencil" aria-hidden="true">Add New Window</span>
+    </a>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Quantity</th>
+                <th>SubElement</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var window in windows)
+            {
+                <tr>
+                    <td>@window.Id</td>
+                    <td>@window.Name</td>
+                    <td>@window.Quantity</td>
+                    <td><a href="" @onclick:preventDefault @onclick="() => ViewSubElement((int)window.Id)">@window.SubElement</a></td>
+                    <td>
+                        <a class="nav-link" href="element-edit/@window.Id">
+                            <span class="oi oi-pencil" aria-hidden="true">Edit</span>
+                        </a>
+                        <a class="nav-link" href="" @onclick:preventDefault @onclick="() => DeleteWindow((int)window.Id)">
+                            <span class="oi oi-trash" aria-hidden="true">Delete</span>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<WindowViewModel>? windows;
+
+    protected override async Task OnInitializedAsync()
+    {
+        windows = await Http.GetFromJsonAsync<List<WindowViewModel>>("/api/Window/GetAll");
+    }
+    protected async void DeleteWindow(int id)
+    {
+        await Http.DeleteAsync("/api/Window/Delete?id=" + id);
+        Navigation.NavigateTo(Navigation.Uri, forceLoad: true);
+    }
+    protected async void ViewSubElement(int id)
+    {
+        //await Http.DeleteAsync("/api/Window/Delete?id=" + id);
+        Navigation.NavigateTo(Navigation.Uri, forceLoad: true);
+    }
+}

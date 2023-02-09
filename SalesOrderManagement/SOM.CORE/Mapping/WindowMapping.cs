@@ -2,6 +2,7 @@
 using SOM.Core.DBModel;
 using SOM.Core.Dto;
 using SOM.Core.Model;
+using SOM.Core.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,7 @@ namespace SOM.Core.Mapping
         {
             CreateMap<WindowDto, Window>().ReverseMap();
             CreateMap<WindowModel, Window>().ReverseMap();
+            CreateMap<WindowViewModel, Window>().ReverseMap();
         }
     }
 }
