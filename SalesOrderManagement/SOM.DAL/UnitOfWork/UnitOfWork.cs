@@ -9,6 +9,7 @@ namespace SOM.DAL.UOF
         private readonly ApplicationDbContext _dbContext;
 
         public IRepository<Element, int> _elementRepository;
+        public IRepository<ElementType, int> _elementTypeRepository;
         public IRepository<Window, int> _windowRepository;
         public IRepository<WindowElement, int> _windowElementRepository;
         public IRepository<Order, int> _orderRepository;
@@ -22,6 +23,10 @@ namespace SOM.DAL.UOF
         public IRepository<Element, int> ElementRepository
         {
             get { return _elementRepository = _elementRepository ?? new Repository<Element, int>(_dbContext); }
+        }
+        public IRepository<ElementType, int> ElementTypeRepository
+        {
+            get { return _elementTypeRepository = _elementTypeRepository ?? new Repository<ElementType, int>(_dbContext); }
         }
         public IRepository<Window, int> WindowRepository
         {

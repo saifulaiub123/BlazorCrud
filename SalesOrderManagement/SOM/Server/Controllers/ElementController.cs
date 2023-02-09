@@ -20,7 +20,7 @@ namespace SOM.Server.Controllers
             return Ok(result);
         }
         [Route("GetById")]
-        public async Task<ActionResult> GetById(int id)
+        public async Task<ActionResult> GetById([FromQuery]int id)
         {
             var result = await _elementService.GetById(id);
             return Ok(result);
@@ -34,7 +34,7 @@ namespace SOM.Server.Controllers
             return Ok();
         }
 
-        [HttpPatch]
+        [HttpPut]
         [Route("Update")]
         public async Task<ActionResult> Update([FromBody] ElementModel element)
         {

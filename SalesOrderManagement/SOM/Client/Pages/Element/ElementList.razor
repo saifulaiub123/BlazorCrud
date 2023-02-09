@@ -16,6 +16,9 @@
 }
 else
 {
+    <a class="nav-link" href="element-add">
+        <span class="oi oi-pencil" aria-hidden="true">Add New Element</span>
+    </a>
     <table class="table">
         <thead>
             <tr>
@@ -38,7 +41,7 @@ else
                         <a class="nav-link" href="element-edit/@element.Id">
                             <span class="oi oi-pencil" aria-hidden="true">Edit</span>
                         </a>
-                        <a class="nav-link" href="element-delete/@element.Id">
+                        <a class="nav-link" href="" @onclick:preventDefault @onclick="() => DeleteElement((int)element.Id)">
                             <span class="oi oi-trash" aria-hidden="true">Delete</span>
                         </a>
                     </td>
@@ -54,5 +57,10 @@ else
     protected override async Task OnInitializedAsync()
     {
         elements = await Http.GetFromJsonAsync<List<ElementViewModel>>("/api/Element/GetAll");
+    }
+    protected async void DeleteElement(int id)
+    {
+        await Http.DeleteAsync("/api/Element/Delete?id=" + id);
+        Navigation.NavigateTo(Navigation.Uri, forceLoad: true);
     }
 }

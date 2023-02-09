@@ -11,6 +11,7 @@ namespace SOM.DAL.Dependency
         {
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IRepository<Element, int>, Repository<Element, int>>();
+            services.AddScoped<IRepository<ElementType, int>, Repository<ElementType, int>>();
             services.AddScoped<IRepository<Window, int>, Repository<Window, int>>();
             services.AddScoped<IRepository<WindowElement, int>, Repository<WindowElement, int>>();
             services.AddScoped<IRepository<Order, int>, Repository<Order, int>>();

@@ -7,6 +7,7 @@ namespace SOM.DAL.UOF
     public interface IUnitOfWork
     {
         IRepository<Element, int> ElementRepository { get; }
+        IRepository<ElementType, int> ElementTypeRepository { get; }
         IRepository<Window, int> WindowRepository { get; }
         IRepository<WindowElement, int> WindowElementRepository { get; }
         IRepository<Order, int> OrderRepository { get; }

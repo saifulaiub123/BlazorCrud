@@ -1,11 +1,12 @@
-﻿@page "/element-edit/{Id:int}"
+﻿@page "/element-add"
 @using SOM.Core.Dto;
+@using SOM.Core.Model;
 
 @inject NavigationManager Navigation
 @inject HttpClient Http
 
+<h3>Element Add</h3>
 
-<h3>Element Edit</h3>
 <form>
     <div class="row">
         <div class="col-md-8">
@@ -33,7 +34,7 @@
     <div class="row">
         <div class="col-md-4">
             <div class="form-group">
-                <input type="button" class="btn btn-primary" @onclick="@UpdteElement" value="Update" />
+                <input type="button" class="btn btn-primary" @onclick="@CreateElement" value="Save" />
                 <input type="button" class="btn btn-primary" @onclick="@Cancel" value="Cancel" />
             </div>
         </div>
@@ -41,26 +42,20 @@
 </form>
 
 @code {
-    [Parameter]
-    public int Id { get; set; }
-
-    private ElementDto? element;
-    private List<ElementTypeDto>? elementTypes;
+    ElementModel element = new ElementModel();
+    List<ElementTypeDto> elementTypes = new List<ElementTypeDto>();
 
     protected override async Task OnInitializedAsync()
     {
-        element = await Http.GetFromJsonAsync<ElementDto>("/api/Element/GetById?id="+Id);
-        elementTypes = await Http.GetFromJsonAsync<List<ElementTypeDto>>("/api/ElementType/GetAll/");
+        elementTypes = await Http.GetFromJsonAsync<List<ElementTypeDto>>("/api/ElementType/GetAll");
     }
-
-    protected async void UpdteElement()
+    protected async void CreateElement()
     {
-        await Http.PutAsJsonAsync("/api/Element/Update", element);
+        await Http.PostAsJsonAsync("/api/Element/Add",element);
         Navigation.NavigateTo("element-list");
     }
     void Cancel()
     {
         Navigation.NavigateTo("element-list");
     }
-
 }
