@@ -1,5 +1,125 @@
-﻿<h3>WindowEdit</h3>
+﻿@page "/window-edit"
+@using SOM.Client.Pages.Element.Modal;
+@using SOM.Core.Dto;
+@using SOM.Core.Model;
+@using SOM.Core.ViewModel;
+@using SOM.Shared
+
+@inject HttpClient Http
+@inject NavigationManager Navigation
+@inject DialogService DialogService
+@implements IDisposable
+
+<h3>Window Add</h3>
+<form>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="form-group">
+                <label for="Name" class="control-label">Name</label>
+                <input form="Name" class="form-control" @bind="@window.Name" />
+            </div>
+            <div class="form-group">
+                <label for="Quantity" class="control-label">Quantity</label>
+                <input form="Quantity" class="form-control" @bind="@window.Quantity" />
+            </div>
+            <div class="form-group">
+                <RadzenButton Text="Add Element" Icon="add_circle_outline" ButtonStyle="ButtonStyle.Light" Click=@AddElement></RadzenButton>
+            </div>
+            @if (selectedElements.Count() > 0)
+            {
+                <div class="table-responsive">
+                    <table class="table">
+                        <caption>List of users</caption>
+                        <thead>
+                            <tr>
+                                <th scope="col">Id</th>
+                                <th scope="col">ElementType</th>
+                                <th scope="col">Width</th>
+                                <th scope="col">Height</th>
+                                <th scope="col">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (int i = 0; i < selectedElements.Count(); i++)
+                            {
+                                var index = i;
+                                <tr>
+                                    <td>@selectedElements.ElementAt(i).Id</td>
+                                    <td>@selectedElements.ElementAt(i).ElementTypeName</td>
+                                    <td>@selectedElements.ElementAt(i).Width</td>
+                                    <td>@selectedElements.ElementAt(i).Height</td>
+                                    <td>
+                                        <RadzenButton Text="Delete" Icon="delete" ButtonStyle="ButtonStyle.Light" Click=@(args => RemoveElement(index))></RadzenButton>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <input type="button" class="btn btn-primary" @onclick="@CreateWindow" value="Save" />
+                <input type="button" class="btn btn-primary" @onclick="@Cancel" value="Cancel" />
+            </div>
+        </div>
+    </div>
+</form>
 
 @code {
+    WindowModel window = new WindowModel();
+    List<ElementViewModel> selectedElements = new List<ElementViewModel>();
 
+    protected override async Task OnInitializedAsync()
+    {
+        DialogService.OnOpen += Open;
+        DialogService.OnClose += Close;
+    }
+    protected async void CreateWindow()
+    {
+        foreach (var element in selectedElements)
+        {
+            window.WindowElement?.Add(new WindowElementModel()
+                {
+                    ElementId = (int)element.Id
+                });
+        }
+        await Http.PostAsJsonAsync("/api/Window/Add", window);
+        Navigation.NavigateTo("window-list");
+    }
+    protected async void Cancel()
+    {
+        Navigation.NavigateTo("window-list");
+    }
+    protected async void AddElement()
+    {
+        dynamic data = await DialogService.OpenAsync<ElementListSelect>("Subelement List",
+               null,
+               new DialogOptions() { Width = "700px", Height = "512px", Resizable = true, Draggable = true });
+        selectedElements.AddRange((List<ElementViewModel>)data);
+        StateHasChanged();
+    }
+    protected async void RemoveElement(int index)
+    {
+        selectedElements.RemoveAt(index);
+        StateHasChanged();
+    }
+
+    void Open(string title, Type type, Dictionary<string, object> parameters, DialogOptions options)
+    {
+
+    }
+
+    void Close(dynamic result)
+    {
+
+    }
+    public void Dispose()
+    {
+        DialogService.OnOpen -= Open;
+        DialogService.OnClose -= Close;
+    }
 }

@@ -11,24 +11,6 @@
 @implements IDisposable
 
 <h3>Window Add</h3>
-
-<form>
-    <div class="form-group">
-        <label for="exampleInputEmail1">Email address</label>
-        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
-    </div>
-    <div class="form-group">
-        <label for="exampleInputPassword1">Password</label>
-        <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
-    </div>
-    <div class="form-check">
-        <input type="checkbox" class="form-check-input" id="exampleCheck1">
-        <label class="form-check-label" for="exampleCheck1">Check me out</label>
-    </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
-</form>
-
-
     <form>
         <div class="row">
             <div class="col-md-8">
@@ -88,7 +70,7 @@
     </form>
 
 @code {
-    WindowDto window = new WindowDto();
+    WindowModel window = new WindowModel();
     List<ElementViewModel> selectedElements = new List<ElementViewModel>();
 
     protected override async Task OnInitializedAsync()
@@ -98,12 +80,19 @@
     }
     protected async void CreateWindow()
     {
+        foreach(var element in selectedElements)
+        {
+            window.WindowElement?.Add(new WindowElementModel()
+            {
+                ElementId = (int)element.Id
+            });
+        }
         await Http.PostAsJsonAsync("/api/Window/Add",window);
-        Navigation.NavigateTo(Navigation.Uri, forceLoad: true);
+        Navigation.NavigateTo("window-list");
     }
     protected async void Cancel()
     {
-        Navigation.NavigateTo(Navigation.Uri, forceLoad: true);
+        Navigation.NavigateTo("window-list");
     }
     protected async void AddElement()
     {

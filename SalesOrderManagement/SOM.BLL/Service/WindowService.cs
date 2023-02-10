@@ -25,8 +25,9 @@ namespace SOM.Bll.Service
 
         public async Task<List<WindowViewModel>> GetAll()
         {
-            var data = await _unitOfWork.WindowRepository.GetAll(x=> !x.IsDeleted);
-            return _mapper.Map<List<WindowViewModel>>(data);
+            var data = await _unitOfWork.WindowRepository.GetAll(x=> !x.IsDeleted, y=> y.WindowElement);
+            var data2 =  _mapper.Map<List<WindowViewModel>>(data);
+            return data2;
         }
         public async Task<WindowDto> GetById(int id)
         {
@@ -35,7 +36,7 @@ namespace SOM.Bll.Service
         }
         public async Task Add(WindowModel window)
         {
-            window.SubElement = window.WindowElement.Count();
+            window.SubElement = window.WindowElement?.Count();
             var mappedResult = _mapper.Map<Window>(window);
             await _unitOfWork.WindowRepository.Insert(mappedResult);
             await _unitOfWork.CommitAsync();

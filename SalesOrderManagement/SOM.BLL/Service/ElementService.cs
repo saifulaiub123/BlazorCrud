@@ -58,8 +58,8 @@ namespace SOM.Bll.Service
             var element = await _unitOfWork.ElementRepository.GetById(id);
             if(element != null) 
             {
-                element.IsDeleted = true;
-                await _unitOfWork.ElementRepository.Update(element);
+                //element.IsDeleted = true;
+                await _unitOfWork.ElementRepository.Delete(element);
                 await _unitOfWork.CommitAsync();
             }
         } 

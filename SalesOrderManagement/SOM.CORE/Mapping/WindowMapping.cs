@@ -17,7 +17,8 @@ namespace SOM.Core.Mapping
         {
             CreateMap<WindowDto, Window>().ReverseMap();
             CreateMap<WindowModel, Window>().ReverseMap();
-            CreateMap<WindowViewModel, Window>().ReverseMap();
+            CreateMap<WindowViewModel, Window>().ReverseMap()
+                .ForMember(a => a.SubElement, b => b.MapFrom(b => b.WindowElement.Count()));
         }
     }
 }
