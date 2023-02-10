@@ -1,31 +1,45 @@
-﻿
-<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        ...
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
-    </div>
-  </div>
-</div>
+﻿@page "/element-list-modal/{WindowId}"
+@using SOM.Core.ViewModel;
+
+@inject HttpClient Http
+@inject DialogService DialogService
+@*@inject DialogService DialogService*@
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Type</th>
+            <th>Width</th>
+            <th>Height</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var element in elements)
+        {
+            <tr>
+                <td>@element.Id</td>
+                <td>@element.ElementTypeName</td>
+                <td>@element.Height</td>
+                <td>@element.Width</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<RadzenButton Text="Close" ButtonStyle="ButtonStyle.Secondary" Click=@CloseDialog></RadzenButton>
 
 @code {
     [Parameter]
-    public string WindowId { get; set; }
+    public int WindowId { get; set; }
 
-    protected override async Task OnInitializedAsync()
+    private List<ElementViewModel>? elements;
+
+    protected override async Task OnInitializedAsync() => elements = await Http.GetFromJsonAsync<List<ElementViewModel>>("/api/Element/GetByWindowId?id=" + WindowId);
+
+    public async Task CloseDialog()
     {
-        var p = 10;
+        DialogService.Close(elements);
+        StateHasChanged();
     }
-
 }

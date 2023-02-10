@@ -26,6 +26,13 @@ namespace SOM.Server.Controllers
             return Ok(result);
         }
 
+        [Route("GetByWindowId")]
+        public async Task<ActionResult> GetByWindowId([FromQuery] int id)
+        {
+            var result = await _elementService.GetByWindowId(id);
+            return Ok(result);
+        }
+
         [HttpPost]
         [Route("Add")]
         public async Task<ActionResult> Add([FromBody] ElementModel element)

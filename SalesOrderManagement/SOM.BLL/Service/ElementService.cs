@@ -24,6 +24,11 @@ namespace SOM.Bll.Service
             var data = await _unitOfWork.ElementRepository.GetAll(x=> !x.IsDeleted, y => y.ElementType);
             return _mapper.Map<List<ElementViewModel>>(data);
         }
+        public async Task<List<ElementViewModel>> GetByWindowId(int id)
+        {
+            var data = await _unitOfWork.WindowElementRepository.GetAll(x=> x.WindowId == id && !x.Element.IsDeleted, y => y.Element, y => y.Element.ElementType);
+            return _mapper.Map<List<ElementViewModel>>(data);
+        }
         public async Task<ElementDto> GetById(int id)
         {
             var data = await _unitOfWork.ElementRepository.FindBy(x => !x.IsDeleted && x.Id == id);

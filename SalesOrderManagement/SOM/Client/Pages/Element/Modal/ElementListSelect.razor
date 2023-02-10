@@ -1,0 +1,88 @@
+﻿@page "/element-list-select"
+@using SOM.Core.ViewModel;
+
+@inject HttpClient Http
+@inject DialogService DialogService
+
+
+<RadzenDataGrid 
+    @ref="grid" 
+    AllowRowSelectOnRowClick="@allowRowSelectOnRowClick" 
+    AllowFiltering="true" 
+    FilterPopupRenderMode="PopupRenderMode.OnDemand" 
+    FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" 
+    AllowPaging="false"
+    AllowSorting="true" 
+    Data="@elements" 
+    TItem="ElementViewModel" 
+    ColumnWidth="100px"
+    SelectionMode="DataGridSelectionMode.Multiple" 
+    @bind-Value=@selectedElements class="m-4"
+>
+    <Columns>
+        <RadzenDataGridColumn TItem="ElementViewModel" Width="60px" Sortable="true" Filterable="false">
+            <HeaderTemplate>
+                <RadzenCheckBox TriState="false" TValue="bool" Value="@(elements.Any(i => selectedElements != null && selectedElements.Contains(i)))"
+                                Change="@(args => selectedElements = args ? elements.ToList() : null)" />
+            </HeaderTemplate>
+            <Template Context="data">
+                <RadzenCheckBox TriState="false" Value="@(selectedElements != null && selectedElements.Contains(data))"
+                                TValue="bool" Change=@(args => { if(!allowRowSelectOnRowClick) { grid?.SelectRow(data); }}) />
+            </Template>
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn TItem="ElementViewModel" Property="Id" Title="Id" Sortable="true" Filterable="false" />
+        <RadzenDataGridColumn TItem="ElementViewModel" Property="ElementTypeName" Title="Element Type" Sortable="true" Filterable="false" />
+        <RadzenDataGridColumn TItem="ElementViewModel" Property="Width" Title="Width" Sortable="true" Filterable="false" />
+        <RadzenDataGridColumn TItem="ElementViewModel" Property="Height" Title="Height" Sortable="true" Filterable="false" />
+    </Columns>
+</RadzenDataGrid>
+
+@*<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Type</th>
+            <th>Width</th>
+            <th>Height</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var element in elements)
+        {
+            <tr>
+                <td>@element.Id</td>
+                <td>@element.ElementTypeName</td>
+                <td>@element.Height</td>
+                <td>@element.Width</td>
+            </tr>
+        }
+    </tbody>
+</table>*@
+
+<RadzenButton Text="Cancel" ButtonStyle="ButtonStyle.Secondary" Click=@Cancel></RadzenButton>
+<RadzenButton Text="Add" ButtonStyle="ButtonStyle.Secondary" Click=@Add></RadzenButton>
+
+@code {
+    bool allowRowSelectOnRowClick = true;
+    RadzenDataGrid<ElementViewModel>? grid = new RadzenDataGrid<ElementViewModel>();
+
+    List<ElementViewModel> elements = new List<ElementViewModel>();
+    IList<ElementViewModel> selectedElements = new List<ElementViewModel>();
+
+    protected override async Task OnInitializedAsync() 
+    {
+        await base.OnInitializedAsync();
+        elements = await Http.GetFromJsonAsync<List<ElementViewModel>>("/api/Element/GetAll");
+    }
+
+    public async Task Add()
+    {
+        DialogService.Close(selectedElements);
+        StateHasChanged();
+    }
+    public async Task Cancel()
+    {
+        DialogService.Close();
+        StateHasChanged();
+    }
+}

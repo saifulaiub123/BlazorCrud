@@ -1,10 +1,13 @@
 ﻿@page "/window-list"
+@using SOM.Client.Pages.Element.Modal;
 @using SOM.Core.Model;
 @using SOM.Core.ViewModel;
 @using SOM.Shared
 
 @inject HttpClient Http
 @inject NavigationManager Navigation
+@inject DialogService DialogService
+@implements IDisposable
 
 <h3>Window List</h3>
 
@@ -17,13 +20,14 @@ else
     <a class="nav-link" href="window-add">
         <span class="oi oi-pencil" aria-hidden="true">Add New Window</span>
     </a>
+    @*<RadzenButton Text="Test Radzen" ButtonStyle="ButtonStyle.Secondary"></RadzenButton>*@
     <table class="table">
         <thead>
             <tr>
                 <th>Id</th>
                 <th>Name</th>
                 <th>Quantity</th>
-                <th>SubElement</th>
+                <th>Total Sub Elements</th>
                 <th>Action</th>
             </tr>
         </thead>
@@ -47,8 +51,6 @@ else
             }
         </tbody>
     </table>
-
-    <ElementListModal Id="1" />
 }
 
 @code {
@@ -56,6 +58,8 @@ else
 
     protected override async Task OnInitializedAsync()
     {
+        DialogService.OnOpen += Open;
+        DialogService.OnClose += Close;
         windows = await Http.GetFromJsonAsync<List<WindowViewModel>>("/api/Window/GetAll");
     }
     protected async void DeleteWindow(int id)
@@ -63,9 +67,25 @@ else
         await Http.DeleteAsync("/api/Window/Delete?id=" + id);
         Navigation.NavigateTo(Navigation.Uri, forceLoad: true);
     }
-    protected async void ViewSubElement(int id)
+    public async Task ViewSubElement(int id)
     {
-        //await Http.DeleteAsync("/api/Window/Delete?id=" + id);
-        Navigation.NavigateTo(Navigation.Uri, forceLoad: true);
+        dynamic data = await DialogService.OpenAsync<ElementListModal>("Subelement List",
+               new Dictionary<string, object>() { {"WindowId", id } },
+               new DialogOptions() { Width = "700px", Height = "512px", Resizable = true, Draggable = true });
+    }
+
+    public void Dispose()
+    {
+        DialogService.OnOpen -= Open;
+        DialogService.OnClose -= Close;
+    }
+    void Open(string title, Type type, Dictionary<string, object> parameters, DialogOptions options)
+    {
+        
+    }
+
+    void Close(dynamic result)
+    {
+        
     }
 }

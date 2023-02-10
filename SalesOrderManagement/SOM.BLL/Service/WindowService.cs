@@ -25,7 +25,7 @@ namespace SOM.Bll.Service
 
         public async Task<List<WindowViewModel>> GetAll()
         {
-            var data = await _unitOfWork.WindowRepository.GetAll();
+            var data = await _unitOfWork.WindowRepository.GetAll(x=> !x.IsDeleted);
             return _mapper.Map<List<WindowViewModel>>(data);
         }
         public async Task<WindowDto> GetById(int id)
@@ -56,10 +56,15 @@ namespace SOM.Bll.Service
         public async Task Delete(int id)
         {
             var window = await _unitOfWork.WindowRepository.GetById(id);
+            var subElements = await _unitOfWork.WindowElementRepository.GetAll(x => x.WindowId == id);
             if (window != null)
             {
                 window.IsDeleted = true;
                 await _unitOfWork.WindowRepository.Update(window);
+                if(subElements.Count() > 0)
+                {
+                    await _unitOfWork.WindowElementRepository.DeleteRange(subElements);
+                }
                 await _unitOfWork.CommitAsync();
             }
         }
