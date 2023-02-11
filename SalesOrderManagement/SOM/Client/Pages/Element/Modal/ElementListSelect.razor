@@ -36,29 +36,6 @@
         <RadzenDataGridColumn TItem="ElementViewModel" Property="Height" Title="Height" Sortable="true" Filterable="false" />
     </Columns>
 </RadzenDataGrid>
-
-@*<table class="table">
-    <thead>
-        <tr>
-            <th>Id</th>
-            <th>Type</th>
-            <th>Width</th>
-            <th>Height</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var element in elements)
-        {
-            <tr>
-                <td>@element.Id</td>
-                <td>@element.ElementTypeName</td>
-                <td>@element.Height</td>
-                <td>@element.Width</td>
-            </tr>
-        }
-    </tbody>
-</table>*@
-
 <RadzenButton Text="Cancel" ButtonStyle="ButtonStyle.Secondary" Click=@Cancel></RadzenButton>
 <RadzenButton Text="Add" ButtonStyle="ButtonStyle.Secondary" Click=@Add></RadzenButton>
 
@@ -75,12 +52,12 @@
         elements = await Http.GetFromJsonAsync<List<ElementViewModel>>("/api/Element/GetAll");
     }
 
-    public async Task Add()
+    public Task Add()
     {
         DialogService.Close(selectedElements);
         StateHasChanged();
     }
-    public async Task Cancel()
+    public Task Cancel()
     {
         DialogService.Close();
         StateHasChanged();

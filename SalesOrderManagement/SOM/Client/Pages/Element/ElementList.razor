@@ -6,8 +6,6 @@
 @inject HttpClient Http
 @inject NavigationManager Navigation
 
-@*@inject IElementService _elementService*@
-
 <h3>Element List</h3>
 
 @if (elements == null)
@@ -37,7 +35,7 @@ else
                     <td>@element.ElementTypeName</td>
                     <td>@element.Height</td>
                     <td>@element.Width</td>
-                    <td>
+                    <td style="display:flex">
                         <a class="nav-link" href="element-edit/@element.Id">
                             <span class="oi oi-pencil" aria-hidden="true">Edit</span>
                         </a>
