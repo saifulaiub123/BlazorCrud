@@ -52,12 +52,12 @@
         elements = await Http.GetFromJsonAsync<List<ElementViewModel>>("/api/Element/GetAll");
     }
 
-    public Task Add()
+    public void Add()
     {
         DialogService.Close(selectedElements);
         StateHasChanged();
     }
-    public Task Cancel()
+    public void Cancel()
     {
         DialogService.Close();
         StateHasChanged();
