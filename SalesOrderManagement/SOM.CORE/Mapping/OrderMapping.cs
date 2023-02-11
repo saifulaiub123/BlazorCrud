@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using SOM.Core.DBModel;
-using SOM.Core.Dto;
 using SOM.Core.Model;
+using SOM.Core.ViewModel;
 
 namespace SOM.Core.Mapping
 {
@@ -9,7 +9,7 @@ namespace SOM.Core.Mapping
     {
         public OrderMapping()
         {
-            CreateMap<OrderDto, Order>().ReverseMap();
+            CreateMap<OrderViewModel, Order>().ReverseMap();
             CreateMap<OrderModel, Order>().ReverseMap();
             CreateMap<OrderWindowModel, OrderWindow>().ReverseMap();
         }

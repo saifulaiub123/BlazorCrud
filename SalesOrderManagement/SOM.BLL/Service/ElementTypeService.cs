@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using SOM.Bll.IService;
-using SOM.Core.Dto;
+using SOM.Core.ViewModel;
 using SOM.DAL.UOF;
 
 namespace SOM.Bll.Service
@@ -15,10 +15,10 @@ namespace SOM.Bll.Service
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<List<ElementTypeDto>> GetAll()
+        public async Task<List<ElementTypeViewModel>> GetAll()
         {
             var data = await _unitOfWork.ElementTypeRepository.GetAll();
-            return _mapper.Map<List<ElementTypeDto>>(data);
+            return _mapper.Map<List<ElementTypeViewModel>>(data);
         }
     }
 }

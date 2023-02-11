@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using SOM.Bll.IService;
 using SOM.Core.DBModel;
-using SOM.Core.Dto;
 using SOM.Core.Model;
+using SOM.Core.ViewModel;
 using SOM.DAL.UOF;
 
 namespace SOM.Bll.Service
@@ -17,15 +17,15 @@ namespace SOM.Bll.Service
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<List<OrderDto>> GetAll()
+        public async Task<List<OrderViewModel>> GetAll()
         {
             var data = await _unitOfWork.OrderRepository.GetAll();
-            return _mapper.Map<List<OrderDto>>(data);
+            return _mapper.Map<List<OrderViewModel>>(data);
         }
-        public async Task<OrderDto> GetById(int id)
+        public async Task<OrderViewModel> GetById(int id)
         {
             var data = await _unitOfWork.OrderRepository.GetById(id);
-            return _mapper.Map<OrderDto>(data);
+            return _mapper.Map<OrderViewModel>(data);
         }
         public async Task Add(OrderModel order)
         {

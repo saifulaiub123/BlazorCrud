@@ -1,5 +1,5 @@
 ﻿@page "/element-edit/{Id:int}"
-@using SOM.Core.Dto;
+@using SOM.Core.ViewModel;
 
 @inject NavigationManager Navigation
 @inject HttpClient Http
@@ -44,13 +44,13 @@
     [Parameter]
     public int Id { get; set; }
 
-    private ElementDto? element;
-    private List<ElementTypeDto>? elementTypes;
+    private ElementViewModel? element;
+    private List<ElementTypeViewModel>? elementTypes;
 
     protected override async Task OnInitializedAsync()
     {
-        element = await Http.GetFromJsonAsync<ElementDto>("/api/Element/GetById?id="+Id);
-        elementTypes = await Http.GetFromJsonAsync<List<ElementTypeDto>>("/api/ElementType/GetAll/");
+        element = await Http.GetFromJsonAsync<ElementViewModel>("/api/Element/GetById?id=" + Id);
+        elementTypes = await Http.GetFromJsonAsync<List<ElementTypeViewModel>>("/api/ElementType/GetAll/");
     }
 
     protected async void UpdteElement()

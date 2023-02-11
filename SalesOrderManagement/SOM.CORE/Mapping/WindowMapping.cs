@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using SOM.Core.DBModel;
-using SOM.Core.Dto;
 using SOM.Core.Model;
 using SOM.Core.ViewModel;
 
@@ -10,7 +9,6 @@ namespace SOM.Core.Mapping
     {
         public WindowMapping()
         {
-            CreateMap<WindowDto, Window>().ReverseMap();
             CreateMap<WindowModel, Window>().ReverseMap();
             CreateMap<WindowViewModel, WindowModel>().ReverseMap();
             CreateMap<WindowViewModel, Window>().ReverseMap()

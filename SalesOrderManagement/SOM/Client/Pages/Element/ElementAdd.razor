@@ -1,6 +1,6 @@
 ﻿@page "/element-add"
-@using SOM.Core.Dto;
 @using SOM.Core.Model;
+@using SOM.Core.ViewModel;
 
 @inject NavigationManager Navigation
 @inject HttpClient Http
@@ -43,11 +43,11 @@
 
 @code {
     ElementModel element = new ElementModel();
-    List<ElementTypeDto> elementTypes = new List<ElementTypeDto>();
+    List<ElementTypeViewModel> elementTypes = new List<ElementTypeViewModel>();
 
     protected override async Task OnInitializedAsync()
     {
-        elementTypes = await Http.GetFromJsonAsync<List<ElementTypeDto>>("/api/ElementType/GetAll");
+        elementTypes = await Http.GetFromJsonAsync<List<ElementTypeViewModel>>("/api/ElementType/GetAll");
     }
     protected async void CreateElement()
     {
