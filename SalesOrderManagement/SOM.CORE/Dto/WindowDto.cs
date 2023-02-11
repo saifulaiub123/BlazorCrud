@@ -1,6 +1,4 @@
-﻿using SOM.Core.DBModel;
-
-namespace SOM.Core.Dto
+﻿namespace SOM.Core.Dto
 {
     public class WindowDto
     {

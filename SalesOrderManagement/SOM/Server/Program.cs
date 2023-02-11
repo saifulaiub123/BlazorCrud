@@ -1,6 +1,4 @@
-using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using SOM.Core.Constant;
 using SOM.DAL.DBContext;
 using System.Text.Json.Serialization;

@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SOM.Bll.IService;
-using SOM.Core.Dto;
 using SOM.Core.Model;
 
 namespace SOM.Server.Controllers

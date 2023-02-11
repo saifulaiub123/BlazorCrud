@@ -4,7 +4,6 @@ using SOM.Core.DBModel;
 using SOM.Core.Dto;
 using SOM.Core.Model;
 using SOM.Core.ViewModel;
-using SOM.DAL;
 using SOM.DAL.UOF;
 
 namespace SOM.Bll.Service
@@ -56,10 +55,11 @@ namespace SOM.Bll.Service
         public async Task Delete(int id)
         {
             var element = await _unitOfWork.ElementRepository.GetById(id);
+            var windowElements = await _unitOfWork.WindowElementRepository.GetAll(x => x.ElementId == id);
             if(element != null) 
             {
-                //element.IsDeleted = true;
                 await _unitOfWork.ElementRepository.Delete(element);
+                await _unitOfWork.WindowElementRepository.DeleteRange(windowElements);
                 await _unitOfWork.CommitAsync();
             }
         } 

@@ -3,11 +3,6 @@ using SOM.Core.DBModel;
 using SOM.Core.Dto;
 using SOM.Core.Model;
 using SOM.Core.ViewModel;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SOM.Core.Mapping
 {
@@ -17,6 +12,7 @@ namespace SOM.Core.Mapping
         {
             CreateMap<WindowDto, Window>().ReverseMap();
             CreateMap<WindowModel, Window>().ReverseMap();
+            CreateMap<WindowViewModel, WindowModel>().ReverseMap();
             CreateMap<WindowViewModel, Window>().ReverseMap()
                 .ForMember(a => a.SubElement, b => b.MapFrom(b => b.WindowElement.Count()));
         }

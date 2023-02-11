@@ -7,5 +7,6 @@ namespace SOM.Core.ViewModel
         public string Name { get; set; }
         public int Quantity { get; set; }
         public int? SubElement { get; set; }
+        public List<WindowElementViewModel>? WindowElement { get; set; }
     }
 }

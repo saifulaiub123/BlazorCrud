@@ -1,5 +1,4 @@
-﻿using SOM.Core.Dto;
-using SOM.Core.Model;
+﻿using SOM.Core.Model;
 using SOM.Core.ViewModel;
 
 namespace SOM.Bll.IService
@@ -8,8 +7,9 @@ namespace SOM.Bll.IService
     {
         Task Add(WindowModel element);
         Task<List<WindowViewModel>> GetAll();
-        Task<WindowDto> GetById(int id);
+        Task<WindowViewModel> GetById(int id);
         Task Update(WindowModel element);
         Task Delete(int id);
+        Task<List<WindowElementViewModel>> GetWindowElementByWindowId(int id);
     }
 }

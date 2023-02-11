@@ -38,9 +38,9 @@ else
                     <td>@window.Id</td>
                     <td>@window.Name</td>
                     <td>@window.Quantity</td>
-                    <td><a href="" @onclick:preventDefault @onclick="() => ViewSubElement((int)window.Id)">view</a></td>
+                    <td><a href="" @onclick:preventDefault @onclick="() => ViewSubElement((int)window.Id)">@window.SubElement</a></td>
                     <td style="display:flex">
-                        <a class="nav-link" href="element-edit/@window.Id">
+                        <a class="nav-link" href="window-edit/@window.Id">
                             <span class="oi oi-pencil" aria-hidden="true">Edit</span>
                         </a>
                         <a class="nav-link" href="" @onclick:preventDefault @onclick="() => DeleteWindow((int)window.Id)">

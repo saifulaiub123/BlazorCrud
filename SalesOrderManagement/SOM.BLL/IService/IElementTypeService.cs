@@ -1,5 +1,4 @@
 ﻿using SOM.Core.Dto;
-using SOM.Core.ViewModel;
 
 namespace SOM.Bll.IService
 {

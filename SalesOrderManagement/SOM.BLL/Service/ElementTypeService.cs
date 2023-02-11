@@ -1,13 +1,7 @@
 ﻿using AutoMapper;
 using SOM.Bll.IService;
 using SOM.Core.Dto;
-using SOM.Core.ViewModel;
 using SOM.DAL.UOF;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SOM.Bll.Service
 {

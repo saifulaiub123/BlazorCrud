@@ -1,8 +1,4 @@
-﻿
-
-using SOM.Core.Dto;
-
-namespace SOM.Core.Model
+﻿namespace SOM.Core.Model
 {
     public class WindowModel
     {
@@ -14,6 +10,6 @@ namespace SOM.Core.Model
         public string Name { get; set; }
         public int Quantity { get; set; }
         public int? SubElement { get; set; }
-        public List<WindowElementModel>? WindowElement { get; set; }
+        public List<WindowElementModel>? WindowElement { get; set; } 
     }
 }

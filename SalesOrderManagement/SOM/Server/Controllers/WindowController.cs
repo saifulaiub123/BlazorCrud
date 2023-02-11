@@ -26,6 +26,13 @@ namespace SOM.Server.Controllers
             var result = await _windowService.GetById(id);
             return Ok(result);
         }
+        [HttpGet]
+        [Route("GetWindowElementByWindowId")]
+        public async Task<ActionResult> GetWindowElementByWindowId(int id)
+        {
+            var result = await _windowService.GetWindowElementByWindowId(id);
+            return Ok(result);
+        }
 
         [HttpPost]
         [Route("Add")]
@@ -35,7 +42,7 @@ namespace SOM.Server.Controllers
             return Ok();
         }
 
-        [HttpPatch]
+        [HttpPut]
         [Route("Update")]
         public async Task<ActionResult> Update([FromBody] WindowModel window)
         {

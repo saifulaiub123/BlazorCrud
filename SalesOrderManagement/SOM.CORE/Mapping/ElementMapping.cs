@@ -20,8 +20,13 @@ namespace SOM.Core.Mapping
                 .ForMember(a => a.Width, b => b.MapFrom(b => b.Element.Width))
                 .ForMember(a => a.Height, b => b.MapFrom(b => b.Element.Height))
                 .ForMember(a => a.ElementTypeId, b => b.MapFrom(b => b.Element.ElementTypeId))
-                .ForMember(a => a.ElementTypeName, b => b.MapFrom(b => b.Element.ElementType.Name))
-                ;
+                .ForMember(a => a.ElementTypeName, b => b.MapFrom(b => b.Element.ElementType.Name));
+
+            CreateMap<ElementViewModel,WindowElementViewModel>()
+                .ForMember(a => a.ElementId, b => b.MapFrom(b => b.Id))
+                .ForMember(a => a.Height, b => b.MapFrom(b => b.Height))
+                .ForMember(a => a.Width, b => b.MapFrom(b => b.Width))
+                .ReverseMap();
         }
     }
 }
