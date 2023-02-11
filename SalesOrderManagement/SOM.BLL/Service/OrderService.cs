@@ -19,7 +19,7 @@ namespace SOM.Bll.Service
 
         public async Task<List<OrderViewModel>> GetAll()
         {
-            var data = await _unitOfWork.OrderRepository.GetAll();
+            var data = await _unitOfWork.OrderRepository.GetAll(x=> !x.IsDeleted);
             return _mapper.Map<List<OrderViewModel>>(data);
         }
         public async Task<OrderViewModel> GetById(int id)

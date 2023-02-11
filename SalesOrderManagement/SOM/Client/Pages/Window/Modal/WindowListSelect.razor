@@ -1,0 +1,63 @@
+﻿@page "/window-list-select"
+@using SOM.Core.ViewModel;
+
+@inject HttpClient Http
+@inject DialogService DialogService
+
+
+<RadzenDataGrid 
+    @ref="grid" 
+    AllowRowSelectOnRowClick="@allowRowSelectOnRowClick" 
+    AllowFiltering="true" 
+    FilterPopupRenderMode="PopupRenderMode.OnDemand" 
+    FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" 
+    AllowPaging="false"
+    AllowSorting="true" 
+    Data="@windows"
+    TItem="WindowViewModel"
+    ColumnWidth="100px"
+    SelectionMode="DataGridSelectionMode.Multiple"
+    @bind-Value=@selectedWindows class="m-4">
+    <Columns>
+        <RadzenDataGridColumn TItem="WindowViewModel" Width="60px" Sortable="true" Filterable="false">
+            <HeaderTemplate>
+                <RadzenCheckBox TriState="false" TValue="bool" Value="@(windows.Any(i => selectedWindows != null && selectedWindows.Contains(i)))"
+                                Change="@(args => selectedWindows = args ? windows.ToList() : null)" />
+            </HeaderTemplate>
+            <Template Context="data">
+                <RadzenCheckBox TriState="false" Value="@(selectedWindows != null && selectedWindows.Contains(data))"
+                                TValue="bool" Change=@(args => { if(!allowRowSelectOnRowClick) { grid?.SelectRow(data); }}) />
+            </Template>
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn TItem="WindowViewModel" Property="Id" Title="Id" Sortable="true" Filterable="false" />
+        <RadzenDataGridColumn TItem="WindowViewModel" Property="Name" Title="Name" Sortable="true" Filterable="false" />
+        <RadzenDataGridColumn TItem="WindowViewModel" Property="Quantity" Title="Quantity" Sortable="true" Filterable="false" />
+    </Columns>
+</RadzenDataGrid>
+<RadzenButton Text="Cancel" ButtonStyle="ButtonStyle.Secondary" Click=@Cancel></RadzenButton>
+<RadzenButton Text="Add" ButtonStyle="ButtonStyle.Secondary" Click=@Add></RadzenButton>
+
+@code {
+    bool allowRowSelectOnRowClick = true;
+    RadzenDataGrid<WindowViewModel>? grid = new RadzenDataGrid<WindowViewModel>();
+
+    List<WindowViewModel> windows = new List<WindowViewModel>();
+    IList<WindowViewModel> selectedWindows = new List<WindowViewModel>();
+
+    protected override async Task OnInitializedAsync() 
+    {
+        await base.OnInitializedAsync();
+        windows = await Http.GetFromJsonAsync<List<WindowViewModel>>("/api/Window/GetAll");
+    }
+
+    public void Add()
+    {
+        DialogService.Close(selectedWindows);
+        StateHasChanged();
+    }
+    public void Cancel()
+    {
+        DialogService.Close();
+        StateHasChanged();
+    }
+}

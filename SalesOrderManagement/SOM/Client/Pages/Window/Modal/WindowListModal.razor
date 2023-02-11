@@ -1,24 +1,22 @@
-﻿@page "/element-list-select"
+﻿@*@page "/window-list-select"
 @using SOM.Core.ViewModel;
 
 @inject HttpClient Http
 @inject DialogService DialogService
 
 
-<RadzenDataGrid 
-    @ref="grid" 
-    AllowRowSelectOnRowClick="@allowRowSelectOnRowClick" 
-    AllowFiltering="true" 
-    FilterPopupRenderMode="PopupRenderMode.OnDemand" 
-    FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" 
-    AllowPaging="false"
-    AllowSorting="true" 
-    Data="@elements" 
-    TItem="ElementViewModel" 
-    ColumnWidth="100px" 
-    SelectionMode="DataGridSelectionMode.Multiple" 
-    @bind-Value=@selectedElements class="m-4"
->
+<RadzenDataGrid @ref="grid"
+                AllowRowSelectOnRowClick="@allowRowSelectOnRowClick"
+                AllowFiltering="true"
+                FilterPopupRenderMode="PopupRenderMode.OnDemand"
+                FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                AllowPaging="false"
+                AllowSorting="true"
+                Data="@elements"
+                TItem="ElementViewModel"
+                ColumnWidth="100px"
+                SelectionMode="DataGridSelectionMode.Multiple"
+                @bind-Value=@selectedElements class="m-4">
     <Columns>
         <RadzenDataGridColumn TItem="ElementViewModel" Width="60px" Sortable="true" Filterable="false">
             <HeaderTemplate>
@@ -46,7 +44,7 @@
     List<ElementViewModel> elements = new List<ElementViewModel>();
     IList<ElementViewModel> selectedElements = new List<ElementViewModel>();
 
-    protected override async Task OnInitializedAsync() 
+    protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
         elements = await Http.GetFromJsonAsync<List<ElementViewModel>>("/api/Element/GetAll");
@@ -63,3 +61,4 @@
         StateHasChanged();
     }
 }
+*@

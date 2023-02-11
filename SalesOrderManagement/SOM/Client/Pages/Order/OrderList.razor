@@ -1,0 +1,91 @@
+﻿@page "/order-list"
+@using SOM.Client.Pages.Element.Modal;
+@using SOM.Client.Pages.Window.Modal;
+@using SOM.Core.Model;
+@using SOM.Core.ViewModel;
+@using SOM.Shared
+
+@inject HttpClient Http
+@inject NavigationManager Navigation
+@inject DialogService DialogService
+@implements IDisposable
+
+<h3>Order List</h3>
+
+@if (orders == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <a class="nav-link" href="order-add">
+        <span class="oi oi-pencil" aria-hidden="true">Add New Order</span>
+    </a>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>State</th>
+                <th>Total Windows</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in orders)
+            {
+                <tr>
+                    <td>@order.Id</td>
+                    <td>@order.Name</td>
+                    <td>@order.State</td>
+                    <td><a href="" @onclick:preventDefault @onclick="() => ViewWindows((int)order.Id)">Click to view windows</a></td>
+                    <td style="display:flex">
+                        <a class="nav-link" href="window-edit/@order.Id">
+                            <span class="oi oi-pencil" aria-hidden="true">Edit</span>
+                        </a>
+                        <a class="nav-link" href="" @onclick:preventDefault @onclick="() => DeleteOrder((int)order.Id)">
+                            <span class="oi oi-trash" aria-hidden="true">Delete</span>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<OrderViewModel>? orders;
+
+    protected override async Task OnInitializedAsync()
+    {
+        DialogService.OnOpen += Open;
+        DialogService.OnClose += Close;
+        orders = await Http.GetFromJsonAsync<List<OrderViewModel>>("/api/Order/GetAll");
+    }
+    protected async void DeleteOrder(int id)
+    {
+        await Http.DeleteAsync("/api/Order/Delete?id=" + id);
+        Navigation.NavigateTo(Navigation.Uri, forceLoad: true);
+    }
+    public async Task ViewWindows(int id)
+    {
+        dynamic data = await DialogService.OpenAsync<WindowListModal>("Window List",
+               new Dictionary<string, object>() { { "OrderId", id } },
+               new DialogOptions() { Width = "700px", Height = "512px", Resizable = true, Draggable = true });
+    }
+
+    public void Dispose()
+    {
+        DialogService.OnOpen -= Open;
+        DialogService.OnClose -= Close;
+    }
+    void Open(string title, Type type, Dictionary<string, object> parameters, DialogOptions options)
+    {
+
+    }
+
+    void Close(dynamic result)
+    {
+
+    }
+}

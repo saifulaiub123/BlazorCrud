@@ -1,0 +1,131 @@
+﻿@page "/order-add"
+@using SOM.Client.Pages.Element.Modal;
+@using SOM.Client.Pages.Window.Modal;
+@using SOM.Core.Model;
+@using SOM.Core.ViewModel;
+@using SOM.Shared
+@using System.Net;
+
+@inject HttpClient Http
+@inject NavigationManager Navigation
+@inject DialogService DialogService
+@inject NotificationService NotificationService
+@implements IDisposable
+
+<h3>New Order</h3>
+<form>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="form-group">
+                <label for="Name" class="control-label">Name</label>
+                <input form="Name" class="form-control" @bind="@order.Name" />
+            </div>
+            <div class="form-group">
+                <label for="Quantity" class="control-label">State</label>
+                <input form="Quantity" class="form-control" @bind="@order.State" />
+            </div>
+            <div class="form-group">
+                <RadzenButton Text="Add Element" Icon="add_circle_outline" ButtonStyle="ButtonStyle.Light" Click=@AddWindows></RadzenButton>
+            </div>
+            @if (selectedWindows.Count() > 0)
+            {
+                <div class="table-responsive">
+                    <table class="table">
+                        <caption>List of users</caption>
+                        <thead>
+                            <tr>
+                                <th scope="col">Id</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">State</th>
+                                <th scope="col">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (int i = 0; i < selectedWindows.Count(); i++)
+                            {
+                                var index = i;
+                                <tr>
+                                    <td>@selectedWindows.ElementAt(i).Id</td>
+                                    <td>@selectedWindows.ElementAt(i).Name</td>
+                                    <td>@selectedWindows.ElementAt(i).Quantity</td>
+                                    <td>
+                                        <RadzenButton Text="Delete" Icon="delete" ButtonStyle="ButtonStyle.Light" Click=@(args => RemoveElement(index))></RadzenButton>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <input type="button" class="btn btn-primary" @onclick="@CreateWindow" value="Save" />
+                <input type="button" class="btn btn-primary" @onclick="@Cancel" value="Cancel" />
+            </div>
+        </div>
+    </div>
+</form>
+
+@code {
+    OrderModel order = new OrderModel();
+    List<WindowViewModel> selectedWindows = new List<WindowViewModel>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        DialogService.OnOpen += Open;
+        DialogService.OnClose += Close;
+    }
+    protected async void CreateWindow()
+    {
+        foreach (var window in selectedWindows)
+        {
+            order.OrderWindow.Add(new OrderWindowModel()
+            {
+                WindowId = (int)window.Id
+            });
+        }
+        var res = await Http.PostAsJsonAsync("/api/Order/Add", order);
+        if (res.StatusCode == HttpStatusCode.OK)
+        {
+            order = new OrderModel();
+            selectedWindows = new List<WindowViewModel>();
+            NotificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Successfull", Detail = "Order Created Successfully", Duration = 5000 });
+        }
+        StateHasChanged();
+    }
+    protected async void Cancel()
+    {
+        Navigation.NavigateTo("order-list");
+    }
+    protected async void AddWindows()
+    {
+        dynamic data = await DialogService.OpenAsync<WindowListSelect>("Window List",
+               null,
+               new DialogOptions() { Width = "700px", Height = "512px", Resizable = true, Draggable = true });
+        selectedWindows.AddRange((List<WindowViewModel>)data);
+        StateHasChanged();
+    }
+    protected async void RemoveElement(int index)
+    {
+        selectedWindows.RemoveAt(index);
+        StateHasChanged();
+    }
+
+    void Open(string title, Type type, Dictionary<string, object> parameters, DialogOptions options)
+    {
+
+    }
+
+    void Close(dynamic result)
+    {
+
+    }
+    public void Dispose()
+    {
+        DialogService.OnOpen -= Open;
+        DialogService.OnClose -= Close;
+    }
+}
