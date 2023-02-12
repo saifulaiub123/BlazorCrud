@@ -1,6 +1,7 @@
-﻿@page "/window-edit/{Id:int}"
+﻿@page "/order-edit/{Id:int}"
 @using AutoMapper;
 @using SOM.Client.Pages.Element.Modal;
+@using SOM.Client.Pages.Window.Modal;
 @using SOM.Core.Model;
 @using SOM.Core.ViewModel;
 @using SOM.Shared;
@@ -12,7 +13,7 @@
 @inject NotificationService NotificationService
 @implements IDisposable
 
-<h3>Window Edit</h3>
+<h3>Order Edit</h3>
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-6">
@@ -22,7 +23,7 @@
                         <RadzenLabel Text="Name" />
                     </div>
                     <div class="col-md-8">
-                        <RadzenTextBox style="width: 100%;" Name="Name" @bind-Value="@window.Name" />
+                        <RadzenTextBox style="width: 100%;" Name="Name" @bind-Value="@order.Name" />
                     </div>
                 </div>
                 <div class="row">
@@ -30,41 +31,39 @@
                         <RadzenLabel Text="Quantity" />
                     </div>
                     <div class="col-md-8">
-                        <RadzenNumeric style="width: 100%;" Name="Name" @bind-Value="@window.Quantity" />
+                        <RadzenTextBox style="width: 100%;" Name="Name" @bind-Value="@order.State" />
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
-                            <input type="button" class="btn btn-primary" @onclick="@UpdateWindow" value="Update" />
+                            <input type="button" class="btn btn-primary" @onclick="@UpdateOrder" value="Update" />
                             <input type="button" class="btn btn-primary" @onclick="@Cancel" value="Cancel" />
                         </div>
                     </div>
                 </div>
             </RadzenFieldset>
-            <RadzenFieldset Text="Sub-Elements">
-                <RadzenButton Text="Add Element" Icon="add_circle_outline" ButtonStyle="ButtonStyle.Info" Click=@AddElement></RadzenButton>
+            <RadzenFieldset Text="Windows">
+                <RadzenButton Text="Add Windows" Icon="add_circle_outline" ButtonStyle="ButtonStyle.Info" Click=@AddWindows></RadzenButton>
                 <div class="table-responsive">
                     <table class="table">
                         <thead>
                             <tr>
                                 <th scope="col">Id</th>
-                                <th scope="col">ElementType</th>
-                                <th scope="col">Width</th>
-                                <th scope="col">Height</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Quantity</th>
                                 <th scope="col">Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var selectedlement in selectedlements)
+                            @foreach (var selectedWindow in selectedWindows)
                             {
                                 <tr>
-                                    <td>@selectedlement.ElementId</td>
-                                    <td>@selectedlement.ElementTypeName</td>
-                                    <td>@selectedlement.Width</td>
-                                    <td>@selectedlement.Height</td>
+                                    <td>@selectedWindow.Id</td>
+                                    <td>@selectedWindow.WindowName</td>
+                                    <td>@selectedWindow.WindowQuantity</td>
                                     <td>
-                                        <RadzenButton Text="Delete" Icon="delete" ButtonStyle="ButtonStyle.Light" Click=@(args => RemoveElement((int)@selectedlement.Id))></RadzenButton>
+                                        <RadzenButton Text="Delete" Icon="delete" ButtonStyle="ButtonStyle.Light" Click=@(args => RemoveWindow((int)@selectedWindow.Id))></RadzenButton>
                                     </td>
                                 </tr>
                             }
@@ -83,21 +82,21 @@
     public int Id { get; set; }
 
 
-    WindowViewModel window = new WindowViewModel();
-    List<WindowElementViewModel> selectedlements = new List<WindowElementViewModel>();
-   
+    OrderViewModel order = new OrderViewModel();
+    List<OrderWindowViewModel> selectedWindows = new List<OrderWindowViewModel>();
+
     protected override async Task OnInitializedAsync()
     {
         DialogService.OnOpen += Open;
         DialogService.OnClose += Close;
 
-        window = await Http.GetFromJsonAsync<WindowViewModel>("/api/Window/GetById?id=" + Id);
-        selectedlements = await Http.GetFromJsonAsync<List<WindowElementViewModel>>("/api/WindowElement/GetByWindowId?windowId=" + Id);
+        order = await Http.GetFromJsonAsync<OrderViewModel>("/api/Order/GetById?id=" + Id);
+        selectedWindows = await Http.GetFromJsonAsync<List<OrderWindowViewModel>>("/api/Window/GetByOrderId?id=" + Id);
     }
-    protected async void UpdateWindow()
+    protected async void UpdateOrder()
     {
-        var data = Mapper.Map<WindowModel>(window);
-        var res = await Http.PutAsJsonAsync("/api/Window/Update", data);
+        var data = Mapper.Map<OrderModel>(order);
+        var res = await Http.PutAsJsonAsync("/api/Order/Update", data);
         if (res.StatusCode == HttpStatusCode.OK)
         {
             NotificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Successfull", Detail = "Successfully Updated", Duration = 5000 });
@@ -106,42 +105,48 @@
         {
             NotificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = "Something Went Wrong", Duration = 4000 });
         }
+        StateHasChanged();
     }
     protected void Cancel()
     {
-        Navigation.NavigateTo("window-list");
+        Navigation.NavigateTo("order-list");
     }
-    protected async void AddElement()
+    protected async void AddWindows()
     {
-        var windowElementModel = new List<WindowElementModel>();
-        List<ElementViewModel> data = await DialogService.OpenAsync<ElementListSelect>("Subelement List",
+        var orderWindowModel = new List<OrderWindowModel>();
+        List<WindowViewModel> data = await DialogService.OpenAsync<WindowListSelect>("Window List",
                null,
                new DialogOptions() { Width = "700px", Height = "512px", Resizable = true, Draggable = true });
         foreach (var obj in data)
         {
-            windowElementModel.Add(new WindowElementModel()
+            orderWindowModel.Add(new OrderWindowModel()
             {
-                WindowId = Id,
-                ElementId = (int)obj.Id
+                OrderId = Id,
+                WindowId = (int)obj.Id
             });
         }
 
-        var res = await Http.PostAsJsonAsync("/api/WindowElement/AddBulk", windowElementModel);
+        var res = await Http.PostAsJsonAsync("/api/OrderWindow/AddBulk", orderWindowModel);
         if (res.StatusCode == HttpStatusCode.OK)
         {
-            var mappedData = Mapper.Map<List<WindowElementViewModel>>(data);
-            selectedlements.AddRange((List<WindowElementViewModel>)mappedData);
-            NotificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Successfull", Detail = "Elements Added Successfully", Duration = 5000 });
+            var resData = await res.Content.ReadFromJsonAsync<List<OrderWindowViewModel>>();
+            //var mappedData = Mapper.Map<List<OrderWindowViewModel>>(resData);
+            selectedWindows.AddRange((List<OrderWindowViewModel>)resData);
+            NotificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Successfull", Detail = "Added Successfully", Duration = 5000 });
+        }
+        else
+        {
+            NotificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = "Something Went Wrong", Duration = 4000 });
         }
         StateHasChanged();
     }
-    protected async void RemoveElement(int id)
+    protected async void RemoveWindow(int id)
     {
-        var res = await Http.DeleteAsync("/api/WindowElement/Delete?id="+id);
-        if(res.StatusCode == HttpStatusCode.OK)
+        var res = await Http.DeleteAsync("/api/OrderWindow/Delete?id=" + id);
+        if (res.StatusCode == HttpStatusCode.OK)
         {
-            selectedlements = selectedlements.Where(x => x.Id != id).ToList();
-            NotificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Successfull", Detail = "Elements Deleted Successfully", Duration = 5000 });
+            selectedWindows = selectedWindows.Where(x => x.Id != id).ToList();
+            NotificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Successfull", Detail = "Deleted Successfully", Duration = 5000 });
         }
         StateHasChanged();
     }

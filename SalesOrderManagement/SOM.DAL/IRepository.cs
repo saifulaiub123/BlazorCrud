@@ -15,6 +15,7 @@ namespace SOM.DAL
         Task<TModel> FindBy(Expression<Func<TModel, bool>> filter, params Expression<Func<TModel, object>>[] includes);
         Task Insert(TModel entity);
         Task InsertRange(IEnumerable<TModel> entity);
+        Task<IEnumerable<TModel>> InsertRangeReturn(IEnumerable<TModel> entity);
         Task Update(TModel entity);
         Task UpdateRange(IEnumerable<TModel> entity);
         Task Delete(TId id);

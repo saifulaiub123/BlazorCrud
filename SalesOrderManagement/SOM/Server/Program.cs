@@ -8,6 +8,7 @@ using System.Reflection;
 using SOM.Bll.Dependency;
 using SOM.DAL.Dependency;
 using SOM.Core.Mapping;
+using BWE.Api.Middleware;
 
 IConfiguration Configuration;
 
@@ -60,7 +61,7 @@ app.UseSwaggerUI(c =>
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "Sales Order Management");
 });
 app.UseHttpsRedirection();
-
+app.UseMiddleware<ErrorHandlingMiddleware>();
 app.UseBlazorFrameworkFiles();
 app.UseStaticFiles();
 

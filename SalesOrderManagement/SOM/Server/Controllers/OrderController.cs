@@ -35,7 +35,7 @@ namespace SOM.Server.Controllers
             return Ok();
         }
 
-        [HttpPatch]
+        [HttpPut]
         [Route("Update")]
         public async Task<ActionResult> Update([FromBody] OrderModel order)
         {

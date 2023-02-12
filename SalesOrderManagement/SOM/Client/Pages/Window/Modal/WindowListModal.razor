@@ -1,64 +1,45 @@
-﻿@*@page "/window-list-select"
+﻿@page "/window-list-modal/{OrderId}"
 @using SOM.Core.ViewModel;
 
 @inject HttpClient Http
 @inject DialogService DialogService
+@*@inject DialogService DialogService*@
 
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Quantity</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var element in windows)
+        {
+            <tr>
+                <td>@element.Id</td>
+                <td>@element.Name</td>
+                <td>@element.Quantity</td>
+            </tr>
+        }
+    </tbody>
+</table>
 
-<RadzenDataGrid @ref="grid"
-                AllowRowSelectOnRowClick="@allowRowSelectOnRowClick"
-                AllowFiltering="true"
-                FilterPopupRenderMode="PopupRenderMode.OnDemand"
-                FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
-                AllowPaging="false"
-                AllowSorting="true"
-                Data="@elements"
-                TItem="ElementViewModel"
-                ColumnWidth="100px"
-                SelectionMode="DataGridSelectionMode.Multiple"
-                @bind-Value=@selectedElements class="m-4">
-    <Columns>
-        <RadzenDataGridColumn TItem="ElementViewModel" Width="60px" Sortable="true" Filterable="false">
-            <HeaderTemplate>
-                <RadzenCheckBox TriState="false" TValue="bool" Value="@(elements.Any(i => selectedElements != null && selectedElements.Contains(i)))"
-                                Change="@(args => selectedElements = args ? elements.ToList() : null)" />
-            </HeaderTemplate>
-            <Template Context="data">
-                <RadzenCheckBox TriState="false" Value="@(selectedElements != null && selectedElements.Contains(data))"
-                                TValue="bool" Change=@(args => { if(!allowRowSelectOnRowClick) { grid?.SelectRow(data); }}) />
-            </Template>
-        </RadzenDataGridColumn>
-        <RadzenDataGridColumn TItem="ElementViewModel" Property="Id" Title="Id" Sortable="true" Filterable="false" />
-        <RadzenDataGridColumn TItem="ElementViewModel" Property="ElementTypeName" Title="Element Type" Sortable="true" Filterable="false" />
-        <RadzenDataGridColumn TItem="ElementViewModel" Property="Width" Title="Width" Sortable="true" Filterable="false" />
-        <RadzenDataGridColumn TItem="ElementViewModel" Property="Height" Title="Height" Sortable="true" Filterable="false" />
-    </Columns>
-</RadzenDataGrid>
-<RadzenButton Text="Cancel" ButtonStyle="ButtonStyle.Secondary" Click=@Cancel></RadzenButton>
-<RadzenButton Text="Add" ButtonStyle="ButtonStyle.Secondary" Click=@Add></RadzenButton>
+<RadzenButton Text="Close" ButtonStyle="ButtonStyle.Secondary" Click=@CloseDialog></RadzenButton>
 
 @code {
-    bool allowRowSelectOnRowClick = true;
-    RadzenDataGrid<ElementViewModel>? grid = new RadzenDataGrid<ElementViewModel>();
+    [Parameter]
+    public int OrderId { get; set; }
 
-    List<ElementViewModel> elements = new List<ElementViewModel>();
-    IList<ElementViewModel> selectedElements = new List<ElementViewModel>();
+    private List<WindowViewModel>? windows;
 
-    protected override async Task OnInitializedAsync()
-    {
-        await base.OnInitializedAsync();
-        elements = await Http.GetFromJsonAsync<List<ElementViewModel>>("/api/Element/GetAll");
+    protected override async Task OnInitializedAsync(){
+        windows = await Http.GetFromJsonAsync<List<WindowViewModel>>("/api/Window/GetByOrderId?id=" + OrderId);
     }
 
-    public void Add()
-    {
-        DialogService.Close(selectedElements);
-        StateHasChanged();
-    }
-    public void Cancel()
+    public async Task CloseDialog()
     {
         DialogService.Close();
         StateHasChanged();
     }
 }
-*@

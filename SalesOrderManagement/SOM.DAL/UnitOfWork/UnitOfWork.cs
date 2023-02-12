@@ -19,7 +19,7 @@ namespace SOM.DAL.UOF
         {
             _dbContext = dbContext;
         }
-
+        public ApplicationDbContext DbContext { get { return _dbContext; } }
         public IRepository<Element, int> ElementRepository
         {
             get { return _elementRepository = _elementRepository ?? new Repository<Element, int>(_dbContext); }

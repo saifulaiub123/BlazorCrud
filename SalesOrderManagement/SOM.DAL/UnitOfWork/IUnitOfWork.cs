@@ -1,11 +1,13 @@
 ﻿
 
 using SOM.Core.DBModel;
+using SOM.DAL.DBContext;
 
 namespace SOM.DAL.UOF
 {
     public interface IUnitOfWork
     {
+        public ApplicationDbContext DbContext { get; }
         IRepository<Element, int> ElementRepository { get; }
         IRepository<ElementType, int> ElementTypeRepository { get; }
         IRepository<Window, int> WindowRepository { get; }

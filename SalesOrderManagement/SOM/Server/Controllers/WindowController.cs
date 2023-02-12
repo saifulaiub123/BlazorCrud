@@ -27,6 +27,13 @@ namespace SOM.Server.Controllers
             return Ok(result);
         }
         [HttpGet]
+        [Route("GetByOrderId")]
+        public async Task<ActionResult> GetByOrderId([FromQuery]int id)
+        {
+            var result = await _windowService.GetByOrderId(id);
+            return Ok(result);
+        }
+        [HttpGet]
         [Route("GetWindowElementByWindowId")]
         public async Task<ActionResult> GetWindowElementByWindowId(int id)
         {

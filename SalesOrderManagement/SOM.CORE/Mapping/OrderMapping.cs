@@ -10,6 +10,7 @@ namespace SOM.Core.Mapping
         public OrderMapping()
         {
             CreateMap<OrderViewModel, Order>().ReverseMap();
+            CreateMap<OrderViewModel, OrderModel>().ReverseMap();
             CreateMap<OrderModel, Order>().ReverseMap();
             CreateMap<OrderWindowModel, OrderWindow>().ReverseMap();
         }

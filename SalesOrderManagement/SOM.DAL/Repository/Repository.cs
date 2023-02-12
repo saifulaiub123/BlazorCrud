@@ -62,6 +62,12 @@ namespace SOM.DAL.Repository
         {
             await DbSet.AddRangeAsync(entity);
         }
+        public async Task<IEnumerable<TModel>> InsertRangeReturn(IEnumerable<TModel> entity)
+        {
+            await DbSet.AddRangeAsync(entity);
+            await _context.SaveChangesAsync();
+            return entity;
+        }
 
         public async Task Update(TModel entity)
         {

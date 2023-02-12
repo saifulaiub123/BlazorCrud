@@ -13,6 +13,7 @@ namespace SOM.Bll.Dependency
             services.AddScoped<IWindowService, WindowService>();
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IWindowElementService, WindowElementService>();
+            services.AddScoped<IOrderWindowService, OrderWindowService>();
             return services;
         }
     }
