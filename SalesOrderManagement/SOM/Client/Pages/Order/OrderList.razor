@@ -4,10 +4,12 @@
 @using SOM.Core.Model;
 @using SOM.Core.ViewModel;
 @using SOM.Shared
+@using System.Net;
 
 @inject HttpClient Http
 @inject NavigationManager Navigation
 @inject DialogService DialogService
+@inject NotificationService NotificationService
 @implements IDisposable
 
 <h3>Order List</h3>
@@ -64,8 +66,17 @@ else
     }
     protected async void DeleteOrder(int id)
     {
-        await Http.DeleteAsync("/api/Order/Delete?id=" + id);
-        Navigation.NavigateTo(Navigation.Uri, forceLoad: true);
+        var res = await Http.DeleteAsync("/api/Order/Delete?id=" + id);
+        if (res.StatusCode == HttpStatusCode.OK)
+        {
+            orders = orders.Where(x => x.Id != id).ToList();
+            NotificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Successfull", Detail = "Successfully Deleted", Duration = 5000 });
+        }
+        else
+        {
+            NotificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = "Something Went Wrong", Duration = 4000 });
+        }
+        StateHasChanged();
     }
     public async Task ViewWindows(int id)
     {

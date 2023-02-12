@@ -8,7 +8,7 @@ namespace SOM.Bll.IService
         Task Add(WindowModel element);
         Task<List<WindowViewModel>> GetAll();
         Task<WindowViewModel> GetById(int id);
-        Task<List<OrderWindowViewModel>> GetByOrderId(int id);
+        Task<List<WindowViewModel>> GetByOrderId(int id);
         Task Update(WindowModel element);
         Task Delete(int id);
         Task<List<WindowElementViewModel>> GetWindowElementByWindowId(int id);

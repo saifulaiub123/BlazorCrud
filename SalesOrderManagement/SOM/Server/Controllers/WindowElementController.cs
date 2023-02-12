@@ -24,8 +24,8 @@ namespace SOM.Server.Controllers
         [Route("AddBulk")]
         public async Task<ActionResult> AddBulk([FromBody] List<WindowElementModel> windowElementModel)
         {
-            await _windowElementService.AddBulk(windowElementModel);
-            return Ok();
+            var data = await _windowElementService.AddBulk(windowElementModel);
+            return Ok(data);
         }
         [HttpDelete]
         [Route("Delete")]

@@ -14,13 +14,13 @@ namespace SOM.Server.Controllers
         }
 
 
-        //[HttpGet]
-        //[Route("GetByOrderId")]
-        //public async Task<ActionResult> GetByOrderId([FromQuery] int windowId)
-        //{
-        //    var result = await _windowElementService.GetByWindowId(windowId);
-        //    return Ok(result);
-        //}
+        [HttpGet]
+        [Route("GetByOrderId")]
+        public async Task<ActionResult> GetByOrderId([FromQuery] int id)
+        {
+            var result = await _orderWindowService.GetByOrderId(id);
+            return Ok(result);
+        }
         [HttpPost]
         [Route("AddBulk")]
         public async Task<ActionResult> AddBulk([FromBody] List<OrderWindowModel> orderWindowModel)

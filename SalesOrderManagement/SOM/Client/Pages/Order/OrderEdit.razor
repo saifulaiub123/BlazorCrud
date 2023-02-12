@@ -91,7 +91,7 @@
         DialogService.OnClose += Close;
 
         order = await Http.GetFromJsonAsync<OrderViewModel>("/api/Order/GetById?id=" + Id);
-        selectedWindows = await Http.GetFromJsonAsync<List<OrderWindowViewModel>>("/api/Window/GetByOrderId?id=" + Id);
+        selectedWindows = await Http.GetFromJsonAsync<List<OrderWindowViewModel>>("/api/OrderWindow/GetByOrderId?id=" + Id);
     }
     protected async void UpdateOrder()
     {
@@ -130,7 +130,6 @@
         if (res.StatusCode == HttpStatusCode.OK)
         {
             var resData = await res.Content.ReadFromJsonAsync<List<OrderWindowViewModel>>();
-            //var mappedData = Mapper.Map<List<OrderWindowViewModel>>(resData);
             selectedWindows.AddRange((List<OrderWindowViewModel>)resData);
             NotificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Successfull", Detail = "Added Successfully", Duration = 5000 });
         }

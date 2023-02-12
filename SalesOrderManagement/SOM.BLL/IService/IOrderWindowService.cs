@@ -5,7 +5,7 @@ namespace SOM.Bll.IService
 {
     public interface IOrderWindowService
     {
-        //Task<List<WindowElementViewModel>> GetByWindowId(int windowId);
+        Task<List<OrderWindowViewModel>> GetByOrderId(int windowId);
         Task<List<OrderWindowViewModel>> AddBulk(List<OrderWindowModel> orderWindowModel);
         Task Delete(int id);
     }

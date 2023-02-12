@@ -133,6 +133,10 @@
             selectedlements.AddRange((List<WindowElementViewModel>)mappedData);
             NotificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Successfull", Detail = "Elements Added Successfully", Duration = 5000 });
         }
+        else
+        {
+            NotificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = "Something Went Wrong", Duration = 4000 });
+        }
         StateHasChanged();
     }
     protected async void RemoveElement(int id)

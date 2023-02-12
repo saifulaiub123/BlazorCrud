@@ -70,10 +70,10 @@ namespace SOM.Bll.Service
             return _mapper.Map<List<WindowElementViewModel>>(data);
         }
 
-        public async Task<List<OrderWindowViewModel>> GetByOrderId(int id)
+        public async Task<List<WindowViewModel>> GetByOrderId(int id)
         {
             var result = await _unitOfWork.OrderWindowRepository.GetAll(x => x.OrderId == id,y=> y.Window);
-            var data = _mapper.Map<List<OrderWindowViewModel>>(result);
+            var data = _mapper.Map<List<WindowViewModel>>(result);
             return data;
         }
     }

@@ -17,11 +17,14 @@ namespace SOM.Bll.Service
             _unitOfWork = unitOfWork;
         }
 
-        public async Task AddBulk(List<WindowElementModel> windowElementModel)
+        public async Task<List<WindowElementViewModel>> AddBulk(List<WindowElementModel> windowElementModel)
         {
             var data = _mapper.Map<List<WindowElement>>(windowElementModel);
-            await _unitOfWork.WindowElementRepository.InsertRange(data);
-            await _unitOfWork.CommitAsync();
+            var returnData = await _unitOfWork.WindowElementRepository.InsertRangeReturn(data);
+            var ids = returnData.Select(x => x.Id).ToList();
+            var returnIncludedData = await _unitOfWork.WindowElementRepository.GetAll(x => ids.Contains(x.Id), y => y.Element);
+            var mappedResult = _mapper.Map<List<WindowElementViewModel>>(returnIncludedData);
+            return mappedResult;
         }
 
         public async Task Delete(int id)

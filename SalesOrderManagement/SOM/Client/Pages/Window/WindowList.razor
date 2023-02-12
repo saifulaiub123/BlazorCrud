@@ -3,10 +3,12 @@
 @using SOM.Core.Model;
 @using SOM.Core.ViewModel;
 @using SOM.Shared
+@using System.Net;
 
 @inject HttpClient Http
 @inject NavigationManager Navigation
 @inject DialogService DialogService
+@inject NotificationService NotificationService
 @implements IDisposable
 
 <h3>Window List</h3>
@@ -63,8 +65,13 @@ else
     }
     protected async void DeleteWindow(int id)
     {
-        await Http.DeleteAsync("/api/Window/Delete?id=" + id);
-        Navigation.NavigateTo(Navigation.Uri, forceLoad: true);
+        var res = await Http.DeleteAsync("/api/Window/Delete?id=" + id);
+        if (res.StatusCode == HttpStatusCode.OK)
+        {
+            windows = windows.Where(x => x.Id != id).ToList();
+            NotificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Successfull", Detail = "Elements Deleted Successfully", Duration = 5000 });
+        }
+        StateHasChanged();
     }
     public async Task ViewSubElement(int id)
     {

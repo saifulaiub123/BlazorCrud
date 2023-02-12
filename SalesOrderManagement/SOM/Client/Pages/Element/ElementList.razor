@@ -66,5 +66,6 @@ else
             elements = elements.Where(x => x.Id != id).ToList();
             NotificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Successfull", Detail = "Elements Deleted Successfully", Duration = 5000 });
         }
+        StateHasChanged();
     }
 }
